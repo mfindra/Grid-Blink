@@ -8,17 +8,20 @@ public class ScoreRegistry : MonoBehaviour
     
     public GameObject scorePanel;
     public GameObject scoreEntry;
+    public Text DownloadText;
     
     public IEnumerator GetScores(string appName)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://serene-tor-28878.herokuapp.com/data?app={appName}"))
         {
             yield return webRequest.SendWebRequest();
-
+            DownloadText.enabled = false;
 
             if (webRequest.isNetworkError)
             {
                 Debug.Log("Error: " + webRequest.error);
+                DownloadText.enabled = true;
+                DownloadText.text = "Error";
             }
             else
             {
