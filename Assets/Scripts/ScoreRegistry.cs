@@ -9,7 +9,7 @@ public class ScoreRegistry : MonoBehaviour
     public GameObject scoreEntry;
     public Text DownloadText;
     
-    // Get score from server
+    // Get scores from server
     public IEnumerator GetScores(string appName)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://serene-tor-28878.herokuapp.com/data?app={appName}"))
