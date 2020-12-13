@@ -7,6 +7,7 @@ public class ButtonFx : MonoBehaviour
     public AudioSource soundFx;
     public AudioClip clickFx;
 
+    // play sound on click
     public void ClickSound()
     {        
        if (PlayerPrefs.GetInt("sound") == 0)

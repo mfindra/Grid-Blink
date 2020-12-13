@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    public GameObject[] layer;
-    public GameObject scrp;
+    public GameObject[] buttons;      // list of all lvl buttons
+    public GameObject scrp;         
     public GameObject lvlText;
     public GameObject scoreText;
     public AudioSource audioS;
@@ -21,6 +21,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         LvlAmt = 0;
+        // initialize lvl layer
         StartCoroutine(_wait());
     }
 
@@ -32,13 +33,14 @@ public class LevelManager : MonoBehaviour
             int show_time = 5;
             int guess_time = 5;
 
+            // generate first 5 (4x4) levels
             while (amt != 11)
             {
                 if (scrp.GetComponent<LayerManag>().game_over != 1)
                 {
+                    // play sound on successful lvl
                     if (PlayerPrefs.GetInt("sound") == 1 && amt != 3)
                         audioS.PlayOneShot(audioC);
-
                     lvl_time = CreateLvl1(show_time, guess_time, amt);
                     lvlText.GetComponent<Text>().text = "Level " + scrp.GetComponent<LayerManag>().lvl;
                     scoreText.GetComponent<Text>().text = "Score " + scrp.GetComponent<LayerManag>().score;
@@ -47,6 +49,7 @@ public class LevelManager : MonoBehaviour
                     scrp.GetComponent<LayerManag>().score += amt * 10;
                 }
 
+                // increase difficuilty
                 if (scrp.GetComponent<LayerManag>().lvl % 4 == 0)
                 {
                     amt += 4;
@@ -54,9 +57,7 @@ public class LevelManager : MonoBehaviour
                 {
                     amt += 2;
                 }
-
             }           
-
             scrp.GetComponent<LayerManag>().sceneChange = 1;
         }
         else
@@ -64,15 +65,17 @@ public class LevelManager : MonoBehaviour
             int amt_cnt = 3;
             int show_time = 6;
             int guess_time = 5;
-
+            // generate 7x7 levels until player loose
             while (scrp.GetComponent<LayerManag>().game_over != 1)
             {
+                // play sound on successful lvl
                 if (PlayerPrefs.GetInt("sound") == 1)
                 {
                     audioS.PlayOneShot(audioC);
                 }
 
-                if (scrp.GetComponent<LayerManag>().lvl % 2 == 1)
+                // increase difficuilty
+                if (scrp.GetComponent<LayerManag>().lvl % 2 == 1 && amt_cnt <= 29)
                 {
                     amt_cnt++;
                 }
@@ -92,6 +95,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    // create 4x4 level
     public float CreateLvl1(float timeshow, float timeguess, int amt)
     {
         HideNumber();
@@ -105,6 +109,7 @@ public class LevelManager : MonoBehaviour
         return (timeshow + timeguess + 0.5f);
     }
 
+    // create 7x7 level
     public float CreateLvl2(float timeshow, float timeguess, int amt)
     {
         HideNumber();
@@ -118,6 +123,7 @@ public class LevelManager : MonoBehaviour
         return (timeshow + timeguess + 0.5f);
     }
 
+    // check answer
     private IEnumerator _checkwait(float timeshow, float timeguess)
     {
         yield return new WaitForSeconds(timeshow);
@@ -125,15 +131,17 @@ public class LevelManager : MonoBehaviour
         FunctionTimer.Create(CheckNumbers, timeguess);
     }
 
+    // show timer on screen
     public void ShowTime(float time)
     {
         cntDwnText.text = time.ToString("0");
     }
 
+    // show squares to remember
     private void ShowNumber()
     {
-        int k = 0;
-        foreach (GameObject _button in layer)
+        int k = 0; // counter
+        foreach (GameObject _button in buttons)
         {
             ColorUtility.TryParseHtmlString("#BFBFBF", out c_gray);
             _button.GetComponent<Button>().interactable = false;
@@ -151,7 +159,8 @@ public class LevelManager : MonoBehaviour
                 }
             }
             else
-            {
+            {   
+                // change color for dark mode
                 if (PlayerPrefs.GetInt("colorMode") == 1)
                 {
                     colorBlock.disabledColor = c_gray;
@@ -166,10 +175,11 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    // hide colored squares
     private void HideNumber()
     {
         int k = 0;
-        foreach (GameObject _button in layer)
+        foreach (GameObject _button in buttons)
         {
             ColorUtility.TryParseHtmlString("#BFBFBF", out c_gray);
             _button.GetComponent<Button>().interactable = true;
@@ -193,6 +203,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    // generate array of numbers which is used to set colored squares 
     private int GenerateArray(int max, int size)
     {
         int sum = 0;
@@ -209,6 +220,7 @@ public class LevelManager : MonoBehaviour
         return sum;
     }
 
+    // clear array 
     private void ClearArray(int size)
     {
         for (int i = 0; i < size; i++)
@@ -217,6 +229,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    // color squares 
     public void SetButColor(GameObject button)
     {
         ColorBlock colorBlock = button.GetComponent<Button>().colors;
@@ -233,6 +246,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            // dark mode colors
             if (PlayerPrefs.GetInt("colorMode") == 1)
             {
                 colorBlock.normalColor = c_gray;
@@ -253,13 +267,14 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    // check answer
     public void CheckNumbers()
     {
         int k = 0;
         int cnt = 0;
         int allcnt = 0;
 
-        foreach (GameObject _button in layer)
+        foreach (GameObject _button in buttons)
         {
             if (_button.GetComponent<Button>().colors.normalColor == Color.red)
             {
@@ -272,6 +287,7 @@ public class LevelManager : MonoBehaviour
             k++;
         }
 
+        // check if game continue
         if (cnt == LvlAmt && allcnt == LvlAmt)
         {
             //Debug.Log("spravne");

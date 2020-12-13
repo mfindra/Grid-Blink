@@ -3,6 +3,19 @@ using UnityEngine;
 
 public class FunctionTimer
 {
+    private Action action;
+    private float timer;
+    private GameObject gameObject;
+    private bool isDestroyerd;
+    private FunctionTimer(Action action, float timer, GameObject gameObject)
+    {
+        this.action = action;
+        this.timer = timer;
+        this.gameObject = gameObject;
+        isDestroyerd = false;
+    }
+
+    // create timer
     public static FunctionTimer Create(Action action, float timer)
     {
         GameObject gameObject = new GameObject("FunctionTimer", typeof(MonoBehaviourHook));
@@ -20,21 +33,9 @@ public class FunctionTimer
         {
             if (onUpdate != null) onUpdate();
         }
-    }
+    } 
 
-    private Action action;
-    private float timer;
-    private GameObject gameObject;
-    private bool isDestroyerd;
-
-    private FunctionTimer(Action action, float timer, GameObject gameObject)
-    {
-        this.action = action;
-        this.timer = timer;
-        this.gameObject = gameObject;
-        isDestroyerd = false;
-    }
-
+    // update timer time
     public void Update()
     {
         if (!isDestroyerd)
@@ -55,6 +56,7 @@ public class FunctionTimer
         }
     }
 
+    // destroy timer
     public void DestroySelf()
     {
         isDestroyerd = true;

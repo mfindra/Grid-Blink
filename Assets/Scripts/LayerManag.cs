@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LayerManag : MonoBehaviour
 {   
-    public GameObject[] layers;  
+    public GameObject[] layers;  // list of all game layers
     public Text scoreText;
     public Text inputtext;
     [HideInInspector] public int game_over = 0;
@@ -17,6 +17,7 @@ public class LayerManag : MonoBehaviour
   
     void Start()
     {   
+        // set togglers and values in playerPrefs on game start
         GameObject.FindObjectOfType<ColorManag>().SetToggler(GameObject.FindObjectOfType<ColorManag>().colorToggle, "colorMode");
         GameObject.FindObjectOfType<ColorManag>().ChangeColor();
         GameObject.FindObjectOfType<ColorManag>().SetToggler(GameObject.FindObjectOfType<ColorManag>().blindToggle, "blindMode");
@@ -31,6 +32,7 @@ public class LayerManag : MonoBehaviour
 
     }
 
+    // change scene timer
     private IEnumerator _sceneChange()
     {
         yield return new WaitForSeconds(0.5f);
@@ -44,6 +46,7 @@ public class LayerManag : MonoBehaviour
         }
     }
 
+    // end game 
     private IEnumerator _wait()
     {
         yield return new WaitForSeconds(0.5f);
@@ -57,6 +60,7 @@ public class LayerManag : MonoBehaviour
         }
     }
    
+    // disable all layers
     public void DisableLayers()
     {
         foreach (GameObject lay in layers)
@@ -65,6 +69,7 @@ public class LayerManag : MonoBehaviour
         }
     }
 
+    // activate 5x5 level layer
     public void StartGame5x5()
     {
         DisableLayers();
@@ -72,18 +77,21 @@ public class LayerManag : MonoBehaviour
         lvl = 1;
     }
 
+    // activate global scores layer
     public void GlobalScores()
     {
         DisableLayers();
         layers[7].SetActive(true);
     }
 
+    // activate 7x7 level layer
     public void StartGame7x7()
     {
         DisableLayers();
         layers[2].SetActive(true);
     }
 
+    // activate menu layer, with value restart
     public void MenuR()
     {
         DisableLayers();
@@ -92,12 +100,14 @@ public class LayerManag : MonoBehaviour
         layers[0].SetActive(true);
     }
 
+    // activate menu layer
     public void Menu()
     {
         DisableLayers();
         layers[0].SetActive(true);
     }
 
+    // exit game
     public void Exit()
     {
 #if UNITY_EDITOR
@@ -108,6 +118,7 @@ public class LayerManag : MonoBehaviour
 
     }
 
+    // activate game over layer
     public void GameOver()
     {
         DisableLayers();
@@ -115,11 +126,11 @@ public class LayerManag : MonoBehaviour
         scoreText.text = "Score " + score;       
     }
 
+    // add now score and upload to server
     public void AddScore()
     {        
         if (inputtext.text != "")
-        {
-            //Debug.Log(inputtext.text);
+        {          
             AddHighscore(score, inputtext.text, System.DateTime.Now.ToString("dd-MM-yyyy"));
             GameObject.FindObjectOfType<ScoreRegistry>().AddNewScore("Grid Blink", inputtext.text, score);
             Scores();
@@ -127,6 +138,7 @@ public class LayerManag : MonoBehaviour
         
     }
 
+    // activate score layer
     public void Scores()
     {
         DisableLayers();
@@ -134,18 +146,21 @@ public class LayerManag : MonoBehaviour
 
     }
 
+    // activate settings layer
     public void Settings()
     {
         DisableLayers();
         layers[4].SetActive(true);
     }
 
+    // activate help layer
     public void Help()
     {
         DisableLayers();
         layers[6].SetActive(true);
     }
 
+    // add new local score
     public void AddHighscore(int score, string name, string date)
     {
         // Create HighscoreEntry

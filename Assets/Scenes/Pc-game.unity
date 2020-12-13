@@ -14255,7 +14255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad04e492e6920c54980790940e608e9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layer:
+  buttons:
   - {fileID: 305142658}
   - {fileID: 1643784385}
   - {fileID: 844552987}
@@ -17087,7 +17087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad04e492e6920c54980790940e608e9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layer:
+  buttons:
   - {fileID: 1193483591}
   - {fileID: 1720612714}
   - {fileID: 1218758096}
